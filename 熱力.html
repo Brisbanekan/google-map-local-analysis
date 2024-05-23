@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Circles</title>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        function initMap() {
+            // Create the map.
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: { lat: 23.457566, lng: 120.291443 },
+                mapTypeId: 'terrain'
+            });
+
+        var citymap = {
+            m5001: {
+                center: { lat: 23.459764, lng: 120.286861 },
+                meter: 500
+            },
+            m5002: {
+                center: { lat: 23.457041, lng: 120.286428 },
+                meter: 500
+            }, m5003: {
+                center: { lat: 23.457884, lng: 120.297315 },
+                meter: 500
+            }, m5004: {
+                center: { lat: 23.455187, lng: 120.295515 },
+                meter: 500
+            },
+        };
+
+            // Construct the circle for each value in citymap.
+            // Note: We scale the area of the circle based on the population.
+            for (var city in citymap) {
+                // Add the circle for this city to the map.
+                var cityCircle = new google.maps.Circle({
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: 'Transparent',
+                    fillOpacity: 0.35,
+                    map: map,
+                    center: citymap[city].center,
+                    radius: citymap[city].meter
+                });
+                // Add marker for the center of the circle
+                var marker = new google.maps.Marker({
+                    position: citymap[city].center,
+                    map: map,
+                    title: 'Center'
+                });
+            }
+        
+
+            // CREATE HEATMAP
+            var heatMapData = [
+                /*
+                {location: new google.maps.LatLng(23.461339, 120.286081), weight: 5},
+                {location: new google.maps.LatLng(23.461301, 120.286268), weight: 5},
+                {location: new google.maps.LatLng(23.461169, 120.287181), weight: 5},
+                {location: new google.maps.LatLng(23.461096, 120.287662), weight: 5},
+                {location: new google.maps.LatLng(23.461056, 120.285515), weight: 5},
+                {location: new google.maps.LatLng(23.461019, 120.285508), weight: 5},
+                {location: new google.maps.LatLng(23.460991, 120.285498), weight: 5},
+                {location: new google.maps.LatLng(23.460963, 120.285492), weight: 5},
+                {location: new google.maps.LatLng(23.460249, 120.286474), weight: 5},
+                {location: new google.maps.LatLng(23.460231, 120.286599), weight: 5},
+                {location: new google.maps.LatLng(23.460207, 120.286538), weight: 5},
+                {location: new google.maps.LatLng(23.460175, 120.286761), weight: 5},
+                {location: new google.maps.LatLng(23.460103, 120.287308), weight: 5},
+                {location: new google.maps.LatLng(23.459856, 120.288734), weight: 5}, //長庚
+                {location: new google.maps.LatLng(23.458243, 120.286963), weight: 5}, 
+                {location: new google.maps.LatLng(23.457336, 120.284780), weight: 5},
+                {location: new google.maps.LatLng(23.456047, 120.286772), weight: 5},
+                {location: new google.maps.LatLng(23.455833, 120.285471), weight: 5},
+                {location: new google.maps.LatLng(23.455628, 120.286852), weight: 5},
+                {location: new google.maps.LatLng(23.455388, 120.288394), weight: 5},
+                {location: new google.maps.LatLng(23.455367, 120.288590), weight: 5},
+                {location: new google.maps.LatLng(23.455341, 120.288810), weight: 5}, //祥和
+                {location: new google.maps.LatLng(23.454616, 120.290413), weight: 5},
+                {location: new google.maps.LatLng(23.454635, 120.293372), weight: 5},
+                {location: new google.maps.LatLng(23.454570, 120.293793), weight: 5},
+                {location: new google.maps.LatLng(23.454445, 120.294530), weight: 5},
+                {location: new google.maps.LatLng(23.454418, 120.294850), weight: 5},
+                {location: new google.maps.LatLng(23.454362, 120.295118), weight: 5},
+                {location: new google.maps.LatLng(23.454831, 120.294929), weight: 5},
+                {location: new google.maps.LatLng(23.455127, 120.295481), weight: 5},
+                {location: new google.maps.LatLng(23.454206, 120.296092), weight: 5},
+                {location: new google.maps.LatLng(23.454156, 120.296322), weight: 5},
+                {location: new google.maps.LatLng(23.454125, 120.296532), weight: 5},
+                {location: new google.maps.LatLng(23.454432, 120.294370), weight: 5},
+                {location: new google.maps.LatLng(23.453995, 120.297400), weight: 5},
+                {location: new google.maps.LatLng(23.454246, 120.297715), weight: 5}, 
+                {location: new google.maps.LatLng(23.456495, 120.297990), weight: 5}, //彩虹
+                {location: new google.maps.LatLng(23.456513, 120.298666), weight: 5},
+                {location: new google.maps.LatLng(23.457324, 120.295427), weight: 5},
+                {location: new google.maps.LatLng(23.458292, 120.295612), weight: 5},
+                {location: new google.maps.LatLng(23.458550, 120.295662), weight: 5},
+                {location: new google.maps.LatLng(23.458738, 120.295883), weight: 5},
+                {location: new google.maps.LatLng(23.458768, 120.295882), weight: 5},
+                {location: new google.maps.LatLng(23.458705, 120.296176), weight: 5},
+                {location: new google.maps.LatLng(23.458346, 120.297907), weight: 5},
+                {location: new google.maps.LatLng(23.458311, 120.298141), weight: 5},
+                {location: new google.maps.LatLng(23.458336, 120.297985), weight: 5},
+                {location: new google.maps.LatLng(23.458321, 120.298082), weight: 5},
+                {location: new google.maps.LatLng(23.458292, 120.298257), weight: 5},
+                {location: new google.maps.LatLng(23.458272, 120.298333), weight: 5},
+                {location: new google.maps.LatLng(23.458141, 120.299006), weight: 5},
+                {location: new google.maps.LatLng(23.457876, 120.298954), weight: 5},
+                {location: new google.maps.LatLng(23.4597181, 120.29593), weight: 5},
+                                                                        // 早餐便當 */
+                /*
+                {location: new google.maps.LatLng(23.460787, 120.285435), weight: 5}, //台灣第一味
+                {location: new google.maps.LatLng(23.455829, 120.285564), weight: 5}, //吳家紅茶冰
+                {location: new google.maps.LatLng(23.458743, 120.295737), weight: 5}, //稻香
+                {location: new google.maps.LatLng(23.4597163,120.2959203), weight: 5}, //麥當勞
+                {location: new google.maps.LatLng(23.454673, 120.293177), weight: 5}, //迷克夏
+                {location: new google.maps.LatLng(23.454654, 120.293302), weight: 5}, //50嵐
+                {location: new google.maps.LatLng(23.454641, 120.293371), weight: 5}, //依農
+                {location: new google.maps.LatLng(23.454551, 120.293937), weight: 5}, //白巷子
+                {location: new google.maps.LatLng(23.454544, 120.293935), weight: 5}, //tea's
+                {location: new google.maps.LatLng(23.454647, 120.293160), weight: 5}, //來吟查
+                {location: new google.maps.LatLng(23.454627, 120.293292), weight: 5}, //夏立克
+                {location: new google.maps.LatLng(23.454538, 120.293805), weight: 5}, //陽光鮮果汁
+                {location: new google.maps.LatLng(23.454527, 120.293870), weight: 5}, //清源
+                {location: new google.maps.LatLng(23.454756, 120.294915), weight: 5}, //馬祖新村
+                {location: new google.maps.LatLng(23.455131, 120.294996), weight: 5}, //先茶道
+                {location: new google.maps.LatLng(23.454171, 120.296252), weight: 5}, //小時候茶飲
+                */
+
+                /*
+                {location: new google.maps.LatLng(23.461085, 120.287774), weight: 5}, //傑森髮型
+                {location: new google.maps.LatLng(23.460304, 120.286084), weight: 5}, //彩提美容
+                {location: new google.maps.LatLng(23.460304, 120.286084), weight: 5}, //斐爾美顏
+                {location: new google.maps.LatLng(23.460236, 120.286325), weight: 5}, //r&p
+                {location: new google.maps.LatLng(23.460268, 120.286389), weight: 5}, //露法義
+                {location: new google.maps.LatLng(23.460217, 120.286671), weight: 5}, //席詩丹
+                {location: new google.maps.LatLng(23.460181, 120.286696), weight: 5}, //斐爾法義
+                {location: new google.maps.LatLng(23.460266, 120.285338), weight: 5}, //131原創
+                {location: new google.maps.LatLng(23.4599915,120.288200), weight: 5}, //ari stidio
+                {location: new google.maps.LatLng(23.4599915,120.288200), weight: 5}, //na時尚每節
+                {location: new google.maps.LatLng(23.4599915,120.288200), weight: 5}, //美炫美甲
+
+                {location: new google.maps.LatLng(23.458543, 120.285171), weight: 5}, //女人專屬spa館
+                {location: new google.maps.LatLng(23.455912, 120.285002), weight: 5}, //閔惠spa
+                {location: new google.maps.LatLng(23.455569, 120.287148), weight: 5}, //樸瑪髮型
+                {location: new google.maps.LatLng(23.455561, 120.287278), weight: 5}, //沐馥美妍館
+                {location: new google.maps.LatLng(23.455497, 120.287771), weight: 5}, //七彩日是精簡
+                {location: new google.maps.LatLng(23.455377, 120.288504), weight: 5}, //洗酸
+                {location: new google.maps.LatLng(23.4558897,120.2868144), weight: 5}, //髮品
+
+                {location: new google.maps.LatLng(23.4560130, 120.293626), weight: 5}, //依合
+                {location: new google.maps.LatLng(23.455280, 120.2937950), weight: 5}, //飛遜
+                {location: new google.maps.LatLng(23.454618, 120.2935310), weight: 5}, //亞拉格
+                {location: new google.maps.LatLng(23.455523, 120.2950750), weight: 5}, //妍色
+                {location: new google.maps.LatLng(23.455160, 120.2949990), weight: 5}, //髮意
+                {location: new google.maps.LatLng(23.454355, 120.2951700), weight: 5}, //showhair
+                {location: new google.maps.LatLng(23.454713, 120.2961170), weight: 5}, //晞栥SPA
+                {location: new google.maps.LatLng(23.454661, 120.2973420), weight: 5}, //貝拉
+                {location: new google.maps.LatLng(23.454531, 120.2977610), weight: 5}, //櫃子髮廊
+                {location: new google.maps.LatLng(23.454516, 120.2983080), weight: 5}, //good美學
+                {location: new google.maps.LatLng(23.454999, 120.293304), weight: 5}, //style風格髮
+                {location: new google.maps.LatLng(23.454942, 120.293611), weight: 5}, //夢ㄉ美甲
+                {location: new google.maps.LatLng(23.456087, 120.298607), weight: 5}, //lisus
+
+                {location: new google.maps.LatLng(23.457201, 120.298827), weight: 5}, //翹髮
+                {location: new google.maps.LatLng(23.457870, 120.297385), weight: 5}, //美其樣
+                {location: new google.maps.LatLng(23.458291, 120.298422), weight: 5}, //與橋
+                {location: new google.maps.LatLng(23.459401, 120.298144), weight: 5}, //濃來
+                {location: new google.maps.LatLng(23.459368, 120.295804), weight: 5}, //海鷹
+                {location: new google.maps.LatLng(23.458580, 120.295664), weight: 5}, //快速速簡
+                 */
+
+                
+                {location: new google.maps.LatLng(23.460200, 120.286564), weight: 5}, //祥合咖啡
+                {location: new google.maps.LatLng(23.460775, 120.288841), weight: 5}, //星巴克
+                {location: new google.maps.LatLng(23.453911, 120.297883), weight: 5}, //vcofee
+                {location: new google.maps.LatLng(23.459724, 120.295977), weight: 5}, //麥當勞
+                {location: new google.maps.LatLng(23.459172, 120.299178), weight: 5}, //中油
+                
+                
+                /*
+                {location: new google.maps.LatLng(23.461244, 120.286072), weight: 5}, //杏一
+                {location: new google.maps.LatLng(23.461237, 120.286160), weight: 5}, //宏福
+                {location: new google.maps.LatLng(23.461206, 120.286310), weight: 5}, //吉新
+                {location: new google.maps.LatLng(23.461159, 120.286655), weight: 5}, //長安
+                {location: new google.maps.LatLng(23.461089, 120.287008), weight: 5}, //維康
+                {location: new google.maps.LatLng(23.460815, 120.287069), weight: 5}, //建源
+                {location: new google.maps.LatLng(23.460002, 120.287933), weight: 5}, //花生糖
+                {location: new google.maps.LatLng(23.454357, 120.295144), weight: 5}, //寶祥
+                {location: new google.maps.LatLng(23.454923, 120.294950), weight: 5}, //祥和
+                藥局*/
+
+
+
+
+
+
+
+
+            ];
+
+            var heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatMapData,
+                radius: 20 // 修改點的大小為20像素
+            });
+
+            heatmap.setMap(map);
+        
+        }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key="YOUR_API_KEYS" &callback=initMap"></script>
+    <!-- Replace YOUR_API_KEY with your actual API key -->
+</body>
+</html>
